@@ -21,7 +21,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:contentDescription="@string/app_name"
-        android:src="@drawable/game_tile_orange"
+        android:src="@drawable/tile_orange_unlit"
         app:layout_constraintBottom_toTopOf="@+id/anchor"
         app:layout_constraintEnd_toStartOf="@+id/anchor"/>
 
@@ -30,7 +30,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:contentDescription="@string/app_name"
-        android:src="@drawable/game_tile_green"
+        android:src="@drawable/tile_green_unlit"
         app:layout_constraintBottom_toTopOf="@+id/anchor"
         app:layout_constraintStart_toEndOf="@+id/anchor"/>
 
@@ -39,7 +39,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:contentDescription="@string/app_name"
-        android:src="@drawable/game_tile_blue"
+        android:src="@drawable/tile_blue_unlit"
         app:layout_constraintEnd_toStartOf="@+id/anchor"
         app:layout_constraintTop_toBottomOf="@+id/anchor" />
 
@@ -48,7 +48,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:contentDescription="@string/app_name"
-        android:src="@drawable/game_tile_yellow"
+        android:src="@drawable/tile_yellow_unlit"
         app:layout_constraintStart_toEndOf="@+id/anchor"
         app:layout_constraintTop_toBottomOf="@+id/anchor" />
 </androidx.constraintlayout.widget.ConstraintLayout>
