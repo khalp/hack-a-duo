@@ -36,7 +36,7 @@ class SequenceGenerator {
          * there are only four buttons
          * @param i: int value to convert to button value
          */
-        fun intToButtons(i: Int): ButtonColors {
+        private fun intToButtons(i: Int): ButtonColors {
             return when (i) {
                 0 -> ButtonColors.ORANGE
                 1 -> ButtonColors.GREEN
