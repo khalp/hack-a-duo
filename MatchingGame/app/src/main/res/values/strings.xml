@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">Matching Game</string>
-    <string name="lost_solo">You lost :( But it\'s ok because failure is necessary to grow :) Number of levels completed: </string>
+    <string name="lost_solo">You lost :( But it\'s OK because failure is necessary to grow :) Number of levels completed: </string>
     <string name="won_solo">You won :) All levels completed! </string>
     <string name="lost_tie_multiplayer">You, my friends, have equally bad memories. Congrats! Number of levels completed: </string>
     <string name="won_tie_multiplayer">Congrats, it\'s a tie! You both completed all of the levels, so go settle this with rock paper scissors. </string>
