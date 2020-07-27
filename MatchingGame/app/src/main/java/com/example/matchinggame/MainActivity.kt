@@ -2,15 +2,21 @@ package com.example.matchinggame
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import com.example.matchinggame.model.SequenceGenerator
 import com.microsoft.device.dualscreen.core.ScreenHelper
 
 class MainActivity : AppCompatActivity() {
     companion object {
         const val GAME = "game"
     }
+
+    private lateinit var player: SequencePlayer
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        player = SequencePlayer(applicationContext)
 
         if (!ScreenHelper.isDualMode(this)) {
             // Remove the dual screen container fragments if they exist
@@ -31,7 +37,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun startGameFragment(container: Int) {
         supportFragmentManager.beginTransaction()
-            .replace(container, GameFragment(), GAME)
+            .replace(container, GameFragment(player), GAME)
             .commit()
     }
 }
