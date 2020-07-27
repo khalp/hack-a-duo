@@ -31,7 +31,6 @@ class SequencePlayer(
     private val blueNote = MediaPlayer.create(context, R.raw.g)
     private val yellowNote = MediaPlayer.create(context, R.raw.a)
 
-
     fun playSequence() {
         val sequence = SequenceGenerator.generateSequence(sequenceLength)
 
@@ -115,5 +114,4 @@ class SequencePlayer(
             }
         }
     }
-
 }
