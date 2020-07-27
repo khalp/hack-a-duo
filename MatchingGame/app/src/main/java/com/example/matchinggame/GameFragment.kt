@@ -49,7 +49,10 @@ class GameFragment(private val player: SequencePlayer) : Fragment(), SequenceLis
         setOnClickListener(btn_blue, 2)
         setOnClickListener(btn_yellow, 3)
 
-        player.initP1Frag(this)
+        if (container?.id == R.id.first_container_id)
+            player.initP1Frag(this)
+        else
+            player.initP2Frag(this)
 
         return view
     }
