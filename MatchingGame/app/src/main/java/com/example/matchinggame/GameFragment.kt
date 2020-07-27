@@ -8,11 +8,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.fragment.app.Fragment
-import com.example.matchinggame.model.SequenceGenerator
 
 class GameFragment(private val player: SequencePlayer) : Fragment(), SequenceListener {
     // Tones to play with buttons
-    override lateinit var redNote: MediaPlayer
+    override lateinit var orangeNote: MediaPlayer
     override lateinit var greenNote: MediaPlayer
     override lateinit var blueNote: MediaPlayer
     override lateinit var yellowNote: MediaPlayer
@@ -26,7 +25,7 @@ class GameFragment(private val player: SequencePlayer) : Fragment(), SequenceLis
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        redNote = MediaPlayer.create(requireContext(), R.raw.c)
+        orangeNote = MediaPlayer.create(requireContext(), R.raw.c)
         greenNote = MediaPlayer.create(requireContext(), R.raw.e)
         blueNote = MediaPlayer.create(requireContext(), R.raw.g)
         yellowNote = MediaPlayer.create(requireContext(), R.raw.a)
