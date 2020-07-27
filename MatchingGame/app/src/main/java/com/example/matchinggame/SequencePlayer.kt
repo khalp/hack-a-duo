@@ -3,6 +3,7 @@ package com.example.matchinggame
 import android.content.Context
 import android.media.MediaPlayer
 import android.util.Log
+import android.widget.Button
 import android.widget.ImageView
 import com.example.matchinggame.model.SequenceGenerator
 import java.lang.IllegalStateException
@@ -27,30 +28,39 @@ class SequencePlayer(private val context: Context) {
         p2Frag = frag
     }
 
-    fun playSequence() {
+    fun playSequence(): Array<ButtonColors>? {
         try {
             if (!this::p1Frag.isInitialized)
                 throw IllegalStateException("Cannot play sequence before initializing fragment")
 
-            val sequence = SequenceGenerator.generateSequence(sequenceLength)
+            // Disable user input
+            p1Frag.disableButtons()
+            p2Frag?.disableButtons()
 
+            // Play generated sequence
+            val sequence = SequenceGenerator.generateSequence(sequenceLength)
             for (bc in sequence) {
                 p1Frag.playNote(bc)
                 // p2Frag?.playNote(bc)
             }
 
-//        p1Frag.acceptUserInput()
-//        p2Frag?.acceptUserInput()
+            // Enable user input
+            p1Frag.enableButtons()
+            p2Frag?.enableButtons()
+
+            return sequence
         } catch (e: Exception) {
             Log.e(this.javaClass.toString(), e.message.toString())
+            return null
         }
     }
 
-    fun increaseLevel() {
+    fun increaseLevel(): Array<ButtonColors>? {
         if (sequenceLength >= LENGTH_END) {
             gameOver(true)
         } else {
             sequenceLength++
+            return playSequence()
         }
     }
 
@@ -92,6 +102,14 @@ class SequencePlayer(private val context: Context) {
 }
 
 interface SequenceListener {
+    // Keeps track of button mode (sequence play vs. user input) and presses
+    var userInputMode: Boolean
+    val presses: ArrayList<ButtonColors>
+
+    // Game stats
+    var sequence: Array<ButtonColors>?
+
+
     // Tones to play with buttons
     var orangeNote: MediaPlayer
     var greenNote: MediaPlayer
@@ -130,7 +148,21 @@ interface SequenceListener {
         }
     }
 
-    fun gameOver()
+    fun disableButtons() {
+        btn_orange.isClickable = false
+        btn_green.isClickable = false
+        btn_blue.isClickable = false
+        btn_yellow.isClickable = false
 
-    fun acceptUserInput()
+        userInputMode = false
+    }
+
+    fun enableButtons() {
+        btn_orange.isClickable = true
+        btn_green.isClickable = true
+        btn_blue.isClickable = true
+        btn_yellow.isClickable = true
+
+        userInputMode = true
+    }
 }
