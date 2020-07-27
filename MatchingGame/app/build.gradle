@@ -26,8 +26,10 @@ dependencies {
 
     implementation googleDependencies.material
 
-    implementation microsoftDependencies.dualScreenLayout
-    implementation microsoftDependencies.fluent
+    implementation microsoftDependencies.dualScreenLayouts
+    implementation microsoftDependencies.core
+    implementation microsoftDependencies.bottomNavigation
+    implementation microsoftDependencies.tabs
 
     testImplementation testDependencies.junit
     androidTestImplementation instrumentationTestDependencies.junit

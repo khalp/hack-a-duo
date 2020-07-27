@@ -56,12 +56,16 @@ ext {
     ]
 
     //Microsoft dependencies version
-    dualScreenLayoutVersion = "1.0.0-alpha01"
-    fluentVersion = "1.1.33"
+    dualScreenLayoutsVersion = "1.0.0-alpha02"
+    coreVersion = "1.0.0-alpha01"
+    bottomNavigationVersion = "1.0.0-alpha03"
+    tabsVersion = "1.0.0-alpha04"
 
     microsoftDependencies = [
-            dualScreenLayout: "com.microsoft.device:dualscreen-layout:$dualScreenLayoutVersion",
-            fluent: "com.microsoft.design:fluent-system-icons:$fluentVersion",
+            dualScreenLayouts: "com.microsoft.device.dualscreen:layouts:$dualScreenLayoutsVersion",
+            core: "com.microsoft.device.dualscreen:core:$coreVersion",
+            bottomNavigation: "com.microsoft.device.dualscreen:bottomnavigation:$bottomNavigationVersion",
+            tabs: "com.microsoft.device.dualscreen:tabs:$tabsVersion"
     ]
 
     //Network dependencies version
