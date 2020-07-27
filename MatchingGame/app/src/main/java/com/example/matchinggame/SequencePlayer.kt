@@ -4,9 +4,7 @@ import android.content.Context
 import android.media.MediaPlayer
 import android.widget.ImageView
 import com.example.matchinggame.model.SequenceGenerator
-import java.lang.IllegalArgumentException
 import java.lang.IllegalStateException
-import kotlin.concurrent.thread
 import com.example.matchinggame.model.SequenceGenerator.Companion.ButtonColors as ButtonColors
 
 class SequencePlayer(private val context: Context) {
@@ -90,7 +88,7 @@ class SequencePlayer(private val context: Context) {
 
 interface SequenceListener {
     // Tones to play with buttons
-    var redNote: MediaPlayer
+    var orangeNote: MediaPlayer
     var greenNote: MediaPlayer
     var blueNote: MediaPlayer
     var yellowNote: MediaPlayer
@@ -106,21 +104,17 @@ interface SequenceListener {
 
         // TODO: put in actual code for lighting up button
         when (buttonColor) {
-            ButtonColors.RED -> {
-                note = redNote
-//                redButton.setBackgroundColor(R.color.lightRed)
+            ButtonColors.ORANGE -> {
+                note = orangeNote
             }
             ButtonColors.GREEN -> {
                 note = greenNote
-//                greenButton.setBackgroundColor(R.color.lightGreen)
             }
             ButtonColors.BLUE -> {
                 note = blueNote
-//                blueButton.setBackgroundColor(R.color.lightBlue)
             }
             ButtonColors.YELLOW -> {
                 note = yellowNote
-//                yellowButton.setBackgroundColor(R.color.lightYellow)
             }
         }
 

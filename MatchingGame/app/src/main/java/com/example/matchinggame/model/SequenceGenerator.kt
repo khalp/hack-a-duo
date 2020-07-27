@@ -5,7 +5,7 @@ import java.util.Random
 
 class SequenceGenerator {
     companion object {
-        enum class ButtonColors { RED, GREEN, BLUE, YELLOW }
+        enum class ButtonColors { ORANGE, GREEN, BLUE, YELLOW }
 
         private const val NUM_BUTTONS = 4
 
@@ -19,7 +19,7 @@ class SequenceGenerator {
             if (length < 1)
                 throw IllegalArgumentException("Length of sequence $length must be >= 1")
 
-            val output = Array(length) { _ -> ButtonColors.RED }
+            val output = Array(length) { _ -> ButtonColors.ORANGE }
             val random = Random()
 
             for (i in 0 until length) {
@@ -38,7 +38,7 @@ class SequenceGenerator {
          */
         fun intToButtons(i: Int): ButtonColors {
             return when (i) {
-                0 -> ButtonColors.RED
+                0 -> ButtonColors.ORANGE
                 1 -> ButtonColors.GREEN
                 2 -> ButtonColors.BLUE
                 3 -> ButtonColors.YELLOW
