@@ -2,6 +2,7 @@ package com.example.matchinggame
 
 import android.content.Context
 import android.media.MediaPlayer
+import android.util.Log
 import android.widget.ImageView
 import com.example.matchinggame.model.SequenceGenerator
 import java.lang.IllegalStateException
@@ -27,18 +28,23 @@ class SequencePlayer(private val context: Context) {
     }
 
     fun playSequence() {
-        if (!this::p1Frag.isInitialized)
-            throw IllegalStateException("Cannot play sequence before initializing fragment")
+        try {
+            if (!this::p1Frag.isInitialized)
+                throw IllegalStateException("Cannot play sequence before initializing fragment")
 
-        val sequence = SequenceGenerator.generateSequence(sequenceLength)
+            val sequence = SequenceGenerator.generateSequence(sequenceLength)
 
-        for (bc in sequence) {
-            p1Frag.playNote(bc)
-            // p2Frag?.playNote(bc)
-        }
+            for (bc in sequence) {
+                p1Frag.playNote(bc)
+                // p2Frag?.playNote(bc)
+            }
 
 //        p1Frag.acceptUserInput()
 //        p2Frag?.acceptUserInput()
+        }
+        catch (e: Exception) {
+            Log.e(this.javaClass.toString(), e.message.toString())
+        }
     }
 
     fun increaseLevel() {
