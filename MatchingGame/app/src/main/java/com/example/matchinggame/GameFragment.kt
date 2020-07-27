@@ -7,10 +7,19 @@ import android.view.LayoutInflater
 import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.ImageView
 import androidx.fragment.app.Fragment
+import com.example.matchinggame.model.SequenceGenerator.Companion.ButtonColors as ButtonColors
 
 class GameFragment(private val player: SequencePlayer) : Fragment(), SequenceListener, View.OnTouchListener {
+    // Keeps track of button mode (sequence play vs. user input) and presses
+    override var userInputMode = false
+    override val presses = ArrayList<ButtonColors>(SequencePlayer.LENGTH_END)
+
+    // Game stats
+    override var sequence: Array<ButtonColors>? = null
+
     // Tones to play with buttons
     override lateinit var orangeNote: MediaPlayer
     override lateinit var greenNote: MediaPlayer
@@ -44,15 +53,23 @@ class GameFragment(private val player: SequencePlayer) : Fragment(), SequenceLis
         btn_orange = view.findViewById(R.id.btn_orange)
         btn_yellow = view.findViewById(R.id.btn_yellow)
 
-        setOnClickListener(btn_orange, 0)
-        setOnClickListener(btn_green, 1)
-        setOnClickListener(btn_blue, 2)
-        setOnClickListener(btn_yellow, 3)
+        setListeners(btn_orange, ButtonColors.ORANGE)
+        setListeners(btn_green, ButtonColors.GREEN)
+        setListeners(btn_blue, ButtonColors.BLUE)
+        setListeners(btn_yellow, ButtonColors.YELLOW)
 
-        if (container?.id == R.id.first_container_id)
+        if (container?.id == R.id.first_container_id) {
             player.initP1Frag(this)
-        else
+            // Give only player 1 the control to start the game
+            view.findViewById<Button>(R.id.start_button).setOnClickListener {
+                sequence = player.playSequence()
+            }
+        }
+        else {
             player.initP2Frag(this)
+            // Remove start button from player 2's screen
+            view.findViewById<Button>(R.id.start_button).visibility = View.GONE
+        }
 
         return view
     }
@@ -108,19 +125,36 @@ class GameFragment(private val player: SequencePlayer) : Fragment(), SequenceLis
         return true
     }
 
-    private fun setOnClickListener(btn: ImageView, value: Int) {
+    private fun setListeners(btn: ImageView, buttonColor: ButtonColors) {
         btn.setOnTouchListener(this)
-
         btn.setOnClickListener {
-            Log.d(this::class.java.toString(), "Button pressed: $value")
+            Log.d(this::class.java.toString(), "Button pressed: ${buttonColor.toString()}")
+            if (userInputMode) {
+                playNote(buttonColor)
+                presses.add(buttonColor)
+
+                if (presses.size == sequence?.size) {
+                    checkUserInput()
+                }
+            }
         }
     }
 
-    override fun gameOver() {
+    fun gameOver() {
         TODO("Not yet implemented")
     }
 
-    override fun acceptUserInput() {
-        TODO("Not yet implemented")
+    private fun checkUserInput() {
+        var passed = true
+
+        for (i in 0 until presses.size) {
+            passed = passed && presses[i] == sequence!![i]
+        }
+
+        if (passed) {
+            sequence = player.increaseLevel()
+        } else {
+            gameOver()
+        }
     }
 }
