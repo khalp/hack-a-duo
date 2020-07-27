@@ -4,12 +4,13 @@ import android.media.MediaPlayer
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import androidx.fragment.app.Fragment
 
-class GameFragment(private val player: SequencePlayer) : Fragment(), SequenceListener {
+class GameFragment(private val player: SequencePlayer) : Fragment(), SequenceListener, View.OnTouchListener {
     // Tones to play with buttons
     override lateinit var orangeNote: MediaPlayer
     override lateinit var greenNote: MediaPlayer
@@ -56,12 +57,62 @@ class GameFragment(private val player: SequencePlayer) : Fragment(), SequenceLis
         return view
     }
 
+    override fun onTouch(view: View, motionEvent: MotionEvent): Boolean {
+        if (view is ImageView) {
+            when (view) {
+                btn_blue -> {
+                    when (motionEvent.action) {
+                        MotionEvent.ACTION_DOWN -> {
+                            view.setImageDrawable(resources.getDrawable(R.drawable.tile_blue_lit, null))
+                        }
+                        MotionEvent.ACTION_UP -> {
+                            view.setImageDrawable(resources.getDrawable(R.drawable.tile_blue_unlit, null))
+                        }
+                    }
+                }
+                btn_green -> {
+                    when (motionEvent.action) {
+                        MotionEvent.ACTION_DOWN -> {
+                            view.setImageDrawable(resources.getDrawable(R.drawable.tile_green_lit, null))
+                        }
+                        MotionEvent.ACTION_UP -> {
+                            view.setImageDrawable(resources.getDrawable(R.drawable.tile_green_unlit, null))
+                        }
+                    }
+                }
+                btn_orange -> {
+                    when (motionEvent.action) {
+                        MotionEvent.ACTION_DOWN -> {
+                            view.setImageDrawable(resources.getDrawable(R.drawable.tile_orange_lit, null))
+                        }
+                        MotionEvent.ACTION_UP -> {
+                            view.setImageDrawable(resources.getDrawable(R.drawable.tile_orange_unlit, null))
+                        }
+                    }
+                }
+                btn_yellow -> {
+                    when (motionEvent.action) {
+                        MotionEvent.ACTION_DOWN -> {
+                            view.setImageDrawable(resources.getDrawable(R.drawable.tile_yellow_lit, null))
+                        }
+                        MotionEvent.ACTION_UP -> {
+                            view.setImageDrawable(resources.getDrawable(R.drawable.tile_yellow_unlit, null))
+                        }
+                    }
+                }
+            }
+        }
+        if (motionEvent.action == MotionEvent.ACTION_UP)
+            view.performClick()
+
+        return true
+    }
+
     private fun setOnClickListener(btn: ImageView, value: Int) {
+        btn.setOnTouchListener(this)
+
         btn.setOnClickListener {
             Log.d(this::class.java.toString(), "Button pressed: $value")
-
-            // TODO: remove this, just using it to show that sequences/notes are playing
-            player.playSequence()
         }
     }
 
@@ -73,3 +124,4 @@ class GameFragment(private val player: SequencePlayer) : Fragment(), SequenceLis
         TODO("Not yet implemented")
     }
 }
+
