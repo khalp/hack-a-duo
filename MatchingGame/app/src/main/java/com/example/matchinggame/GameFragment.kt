@@ -13,7 +13,8 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.example.matchinggame.model.SequenceGenerator.Companion.ButtonColors as ButtonColors
 
-class GameFragment(private val player: SequencePlayer) : Fragment(), SequenceListener, View.OnTouchListener {
+class GameFragment(private val player: SequencePlayer) : Fragment(), SequenceListener,
+    View.OnTouchListener {
     // Keeps track of button mode (sequence play vs. user input) and presses
     override var userInputMode = false
     override val presses = ArrayList<ButtonColors>(SequencePlayer.LENGTH_END)
@@ -24,7 +25,6 @@ class GameFragment(private val player: SequencePlayer) : Fragment(), SequenceLis
     override var sequence: Array<ButtonColors>? = null
 
     // Tones to play with buttons
-    override lateinit var note: MediaPlayer
     override lateinit var orangeNote: MediaPlayer
     override lateinit var greenNote: MediaPlayer
     override lateinit var blueNote: MediaPlayer
@@ -43,7 +43,12 @@ class GameFragment(private val player: SequencePlayer) : Fragment(), SequenceLis
         greenNote = MediaPlayer.create(requireContext(), R.raw.e)
         blueNote = MediaPlayer.create(requireContext(), R.raw.g)
         yellowNote = MediaPlayer.create(requireContext(), R.raw.a)
-        note = MediaPlayer()
+
+        orangeNote.isLooping = true
+        greenNote.isLooping = true
+        blueNote.isLooping = true
+        yellowNote.isLooping = true
+
     }
 
     override fun onCreateView(
@@ -79,50 +84,76 @@ class GameFragment(private val player: SequencePlayer) : Fragment(), SequenceLis
     }
 
     override fun onTouch(view: View, motionEvent: MotionEvent): Boolean {
-        if (view is ImageView) {
-            when (view) {
-                btn_blue -> {
-                    when (motionEvent.action) {
-                        MotionEvent.ACTION_DOWN -> {
-                            view.setImageDrawable(resources.getDrawable(R.drawable.tile_blue_lit, null))
-                        }
-                        MotionEvent.ACTION_UP -> {
-                            view.setImageDrawable(resources.getDrawable(R.drawable.tile_blue_unlit, null))
-                        }
+        if (view !is ImageView)
+            return false
+
+        when (view) {
+            btn_blue -> {
+                when (motionEvent.action) {
+                    MotionEvent.ACTION_DOWN -> {
+                        view.setImageDrawable(
+                            resources.getDrawable(R.drawable.tile_blue_lit, null)
+                        )
+                        blueNote.start()
+                    }
+                    MotionEvent.ACTION_UP -> {
+                        view.setImageDrawable(
+                            resources.getDrawable(R.drawable.tile_blue_unlit, null)
+                        )
+                        blueNote.pause()
                     }
                 }
-                btn_green -> {
-                    when (motionEvent.action) {
-                        MotionEvent.ACTION_DOWN -> {
-                            view.setImageDrawable(resources.getDrawable(R.drawable.tile_green_lit, null))
-                        }
-                        MotionEvent.ACTION_UP -> {
-                            view.setImageDrawable(resources.getDrawable(R.drawable.tile_green_unlit, null))
-                        }
+            }
+            btn_green -> {
+                when (motionEvent.action) {
+                    MotionEvent.ACTION_DOWN -> {
+                        view.setImageDrawable(
+                            resources.getDrawable(R.drawable.tile_green_lit, null)
+                        )
+                        greenNote.start()
+                    }
+                    MotionEvent.ACTION_UP -> {
+                        view.setImageDrawable(
+                            resources.getDrawable(R.drawable.tile_green_unlit, null)
+                        )
+                        greenNote.pause()
                     }
                 }
-                btn_orange -> {
-                    when (motionEvent.action) {
-                        MotionEvent.ACTION_DOWN -> {
-                            view.setImageDrawable(resources.getDrawable(R.drawable.tile_orange_lit, null))
-                        }
-                        MotionEvent.ACTION_UP -> {
-                            view.setImageDrawable(resources.getDrawable(R.drawable.tile_orange_unlit, null))
-                        }
+            }
+            btn_orange -> {
+                when (motionEvent.action) {
+                    MotionEvent.ACTION_DOWN -> {
+                        view.setImageDrawable(
+                            resources.getDrawable(R.drawable.tile_orange_lit, null)
+                        )
+                        orangeNote.start()
+                    }
+                    MotionEvent.ACTION_UP -> {
+                        view.setImageDrawable(
+                            resources.getDrawable(R.drawable.tile_orange_unlit, null)
+                        )
+                        orangeNote.pause()
                     }
                 }
-                btn_yellow -> {
-                    when (motionEvent.action) {
-                        MotionEvent.ACTION_DOWN -> {
-                            view.setImageDrawable(resources.getDrawable(R.drawable.tile_yellow_lit, null))
-                        }
-                        MotionEvent.ACTION_UP -> {
-                            view.setImageDrawable(resources.getDrawable(R.drawable.tile_yellow_unlit, null))
-                        }
+            }
+            btn_yellow -> {
+                when (motionEvent.action) {
+                    MotionEvent.ACTION_DOWN -> {
+                        view.setImageDrawable(
+                            resources.getDrawable(R.drawable.tile_yellow_lit, null)
+                        )
+                        yellowNote.start()
+                    }
+                    MotionEvent.ACTION_UP -> {
+                        view.setImageDrawable(
+                            resources.getDrawable(R.drawable.tile_yellow_unlit, null)
+                        )
+                        yellowNote.pause()
                     }
                 }
             }
         }
+
         if (motionEvent.action == MotionEvent.ACTION_UP && userInputMode)
             view.performClick()
 
@@ -134,7 +165,6 @@ class GameFragment(private val player: SequencePlayer) : Fragment(), SequenceLis
         btn.setOnClickListener {
             Log.d(this::class.java.toString(), "Button pressed: $buttonColor")
             if (userInputMode) {
-                playNote(buttonColor)
                 presses.add(buttonColor)
 
                 if (presses.size == sequence?.size) {
@@ -150,7 +180,8 @@ class GameFragment(private val player: SequencePlayer) : Fragment(), SequenceLis
         level++
         readyToCheck = false
         presses.clear()
-        view?.findViewById<Button>(R.id.start_button)?.text = resources.getString(R.string.start_level, level)
+        view?.findViewById<Button>(R.id.start_button)?.text =
+            resources.getString(R.string.start_level, level)
     }
 
     override fun displayEndScreen(resId: Int, finished: Boolean) {

@@ -6,6 +6,7 @@ import android.view.MotionEvent
 import com.example.matchinggame.model.SequenceGenerator
 import com.example.matchinggame.model.SequenceGenerator.Companion.ButtonColors
 import kotlinx.coroutines.Runnable
+import java.lang.Thread.sleep
 
 class SequencePlayer {
     companion object {
@@ -37,25 +38,28 @@ class SequencePlayer {
 
             // Play generated sequence
             val sequence = SequenceGenerator.generateSequence(sequenceLength)
-            val delay = 500
+            val noteLength = 700L
+            val noteDelay = 150L
 
             var handler = Handler()
-            for (bc in 0 until sequence.size) {
+            for (i in sequence.indices) {
+                handler.postDelayed({
+                    if (i > 0) {
+                        p1Frag.stopNote(sequence[i - 1])
+                    }
+                }, i * noteLength + (i - 1) * noteDelay)
                 handler.postDelayed(Runnable {
-                    p1Frag.playNote(sequence[bc])
-                    Log.d("Delayed", "note happened")
-                }, (bc * delay).toLong())
+                    p1Frag.playNote(sequence[i])
+                }, i * (noteLength + noteDelay))
                 handler = Handler()
             }
             handler.postDelayed(Runnable {
-                p1Frag.note.stop()
-                p1Frag.triggerButton(MotionEvent.ACTION_UP)
+                p1Frag.stopNote(sequence[sequence.lastIndex])
 
                 // Enable user input
                 p1Frag.enableButtons()
                 p2Frag?.enableButtons()
-                Log.d("Delayed", "note ended")
-            }, (sequence.size * delay).toLong())
+            }, sequence.size * noteLength + (sequence.size - 1) * noteDelay)
 
             return sequence
         } catch (e: Exception) {
