@@ -13,7 +13,9 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.example.matchinggame.model.SequenceGenerator.Companion.ButtonColors as ButtonColors
 
-class GameFragment(private val player: SequencePlayer) : Fragment(), SequenceListener,
+class GameFragment(private val player: SequencePlayer) :
+    Fragment(),
+    SequenceListener,
     View.OnTouchListener {
     // Keeps track of button mode (sequence play vs. user input) and presses
     override var userInputMode = false
@@ -48,7 +50,6 @@ class GameFragment(private val player: SequencePlayer) : Fragment(), SequenceLis
         greenNote.isLooping = true
         blueNote.isLooping = true
         yellowNote.isLooping = true
-
     }
 
     override fun onCreateView(
