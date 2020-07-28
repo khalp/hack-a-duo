@@ -15,7 +15,7 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        player = SequencePlayer(applicationContext)
+        player = SequencePlayer()
 
         if (!ScreenHelper.isDualMode(this)) {
             // Remove the dual screen container fragments if they exist

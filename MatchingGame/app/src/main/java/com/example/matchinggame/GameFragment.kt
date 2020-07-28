@@ -151,7 +151,6 @@ class GameFragment(private val player: SequencePlayer) : Fragment(), SequenceLis
         view?.findViewById<Button>(R.id.start_button)?.text = resources.getString(R.string.start_level, level)
     }
 
-
     override fun displayEndScreen(resId: Int, finished: Boolean) {
         val message = if (finished) resources.getString(resId)
         else "${resources.getString(resId)} $level"
