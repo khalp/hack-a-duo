@@ -55,49 +55,80 @@ class SequencePlayer(private val context: Context) {
         }
     }
 
-    fun increaseLevel(): Array<ButtonColors>? {
+    fun checkUserInput() {
+        if (p1Frag.readyToCheck && p2Frag == null) {
+            // Single player
+            if (p1Frag.checkUserInput()) {
+                increaseLevel(p1Frag)
+            } else {
+                gameOver(false)
+            }
+        } else if (p1Frag.readyToCheck && p2Frag != null && p2Frag!!.readyToCheck) {
+            // Multiplayer
+            val p1 = p1Frag.checkUserInput()
+            val p2 = p2Frag!!.checkUserInput()
+
+            if (p1 && p2) {
+                increaseLevel(p1Frag, p2Frag)
+            } else if (p1 && !p2) {
+                gameOver(false, 1)
+            } else if (!p1 && p2) {
+                gameOver(false, 2)
+            } else {
+                gameOver(false, 0)
+            }
+        }
+    }
+
+    private fun increaseLevel(frag1: SequenceListener, frag2: SequenceListener? = null) {
         if (sequenceLength >= LENGTH_END) {
             gameOver(true)
         } else {
             sequenceLength++
-            return playSequence()
+            frag1.increaseLevel()
+            frag2?.increaseLevel()
         }
     }
 
-    // TODO: extract logic to individual listener fragments or interface
-    fun gameOver(finished: Boolean, winningSide: Int? = null): String {
-        return ""
-//        // All levels completed
-//        if (finished) {
-//            return if (winningSide == null) {
-//                // Single player
-//                context.getString(R.string.won_solo)
-//            } else {
-//                context.getString(R.string.won_tie_multiplayer)
-//            }
-//        } else {
-//            return if (winningSide == null) {
-//                // Single player
-//                context.getString(R.string.lost_solo)
-//            } else {
-//                // Multiplayer
-//                when (winningSide) {
-//                    0 -> {
-//                        // Both failed
-//                        context.getString(R.string.lost_tie_multiplayer)
-//                    }
-//                    1 -> {
-//                        // Player one won
-//                        context.getString(R.string.won_player_one)
-//                    }
-//                    2 -> {
-//                        // Player two won
-//                        context.getString(R.string.won_player_two)
-//                    }
-//                    else -> throw IllegalArgumentException("Losing side $winningSide must be in range [0, 2]")
-//                }
-//            }
-//        }
+    private fun gameOver(finished: Boolean, winningSide: Int? = null) {
+        if (finished) {
+            // All levels completed
+            if (winningSide == null) {
+                // Single player
+                p1Frag.displayEndScreen(R.string.won_solo, finished)
+            } else {
+                p1Frag.displayEndScreen(R.string.won_tie_multiplayer, finished)
+                p2Frag?.displayEndScreen(R.string.won_tie_multiplayer, finished)
+            }
+        } else {
+            // Game finished before levels were completed
+            if (winningSide == null) {
+                // Single player
+                p1Frag.displayEndScreen(R.string.lost_solo, finished)
+            } else {
+                // Multiplayer
+                when (winningSide) {
+                    0 -> {
+                        // Both failed
+                        p1Frag.displayEndScreen(R.string.lost_tie_multiplayer, finished)
+                        p2Frag?.displayEndScreen(R.string.lost_tie_multiplayer, finished)
+                    }
+                    1 -> {
+                        // Player one won
+                        p1Frag.displayEndScreen(R.string.won_player_one, finished)
+                        p2Frag?.displayEndScreen(R.string.lost_other_player, finished)
+                    }
+                    2 -> {
+                        // Player two won
+                        p1Frag.displayEndScreen(R.string.lost_other_player, finished)
+                        p2Frag?.displayEndScreen(R.string.won_player_two, finished)
+                    }
+                    else -> throw IllegalArgumentException("Losing side $winningSide must be in range [0, 2]")
+                }
+            }
+        }
+
+        //resetGame()
     }
 }
 
@@ -105,10 +136,11 @@ interface SequenceListener {
     // Keeps track of button mode (sequence play vs. user input) and presses
     var userInputMode: Boolean
     val presses: ArrayList<ButtonColors>
+    var readyToCheck: Boolean
 
     // Game stats
+    var level: Int
     var sequence: Array<ButtonColors>?
-
 
     // Tones to play with buttons
     var orangeNote: MediaPlayer
@@ -165,4 +197,8 @@ interface SequenceListener {
 
         userInputMode = true
     }
+    
+    fun checkUserInput(): Boolean
+    fun displayEndScreen(resId: Int, finished: Boolean)
+    fun increaseLevel()
 }
