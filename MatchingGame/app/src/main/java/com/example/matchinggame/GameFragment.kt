@@ -92,8 +92,8 @@ class GameFragment(private val player: SequencePlayer) :
             btn_blue -> {
                 when (motionEvent.action) {
                     MotionEvent.ACTION_DOWN, MotionEvent.ACTION_POINTER_INDEX_MASK -> {
-                        if (motionEvent.action == MotionEvent.ACTION_POINTER_INDEX_MASK
-                            || userInputMode
+                        if (motionEvent.action == MotionEvent.ACTION_POINTER_INDEX_MASK ||
+                            userInputMode
                         ) {
                             view.setImageDrawable(
                                 resources.getDrawable(R.drawable.tile_blue_lit, null)
@@ -102,8 +102,8 @@ class GameFragment(private val player: SequencePlayer) :
                         }
                     }
                     MotionEvent.ACTION_UP, MotionEvent.ACTION_POINTER_INDEX_SHIFT -> {
-                        if (motionEvent.action == MotionEvent.ACTION_POINTER_INDEX_SHIFT
-                            || userInputMode
+                        if (motionEvent.action == MotionEvent.ACTION_POINTER_INDEX_SHIFT ||
+                            userInputMode
                         ) {
                             view.setImageDrawable(
                                 resources.getDrawable(R.drawable.tile_blue_unlit, null)
@@ -116,8 +116,8 @@ class GameFragment(private val player: SequencePlayer) :
             btn_green -> {
                 when (motionEvent.action) {
                     MotionEvent.ACTION_DOWN, MotionEvent.ACTION_POINTER_INDEX_MASK -> {
-                        if (motionEvent.action == MotionEvent.ACTION_POINTER_INDEX_MASK
-                            || userInputMode
+                        if (motionEvent.action == MotionEvent.ACTION_POINTER_INDEX_MASK ||
+                            userInputMode
                         ) {
                             view.setImageDrawable(
                                 resources.getDrawable(R.drawable.tile_green_lit, null)
@@ -126,8 +126,8 @@ class GameFragment(private val player: SequencePlayer) :
                         }
                     }
                     MotionEvent.ACTION_UP, MotionEvent.ACTION_POINTER_INDEX_SHIFT -> {
-                        if (motionEvent.action == MotionEvent.ACTION_POINTER_INDEX_SHIFT
-                            || userInputMode
+                        if (motionEvent.action == MotionEvent.ACTION_POINTER_INDEX_SHIFT ||
+                            userInputMode
                         ) {
                             view.setImageDrawable(
                                 resources.getDrawable(R.drawable.tile_green_unlit, null)
@@ -140,8 +140,8 @@ class GameFragment(private val player: SequencePlayer) :
             btn_orange -> {
                 when (motionEvent.action) {
                     MotionEvent.ACTION_DOWN, MotionEvent.ACTION_POINTER_INDEX_MASK -> {
-                        if (motionEvent.action == MotionEvent.ACTION_POINTER_INDEX_MASK
-                            || userInputMode
+                        if (motionEvent.action == MotionEvent.ACTION_POINTER_INDEX_MASK ||
+                            userInputMode
                         ) {
                             view.setImageDrawable(
                                 resources.getDrawable(R.drawable.tile_orange_lit, null)
@@ -150,8 +150,8 @@ class GameFragment(private val player: SequencePlayer) :
                         }
                     }
                     MotionEvent.ACTION_UP, MotionEvent.ACTION_POINTER_INDEX_SHIFT -> {
-                        if (motionEvent.action == MotionEvent.ACTION_POINTER_INDEX_SHIFT
-                            || userInputMode
+                        if (motionEvent.action == MotionEvent.ACTION_POINTER_INDEX_SHIFT ||
+                            userInputMode
                         ) {
                             view.setImageDrawable(
                                 resources.getDrawable(R.drawable.tile_orange_unlit, null)
@@ -164,8 +164,8 @@ class GameFragment(private val player: SequencePlayer) :
             btn_yellow -> {
                 when (motionEvent.action) {
                     MotionEvent.ACTION_DOWN, MotionEvent.ACTION_POINTER_INDEX_MASK -> {
-                        if (motionEvent.action == MotionEvent.ACTION_POINTER_INDEX_MASK
-                            || userInputMode
+                        if (motionEvent.action == MotionEvent.ACTION_POINTER_INDEX_MASK ||
+                            userInputMode
                         ) {
                             view.setImageDrawable(
                                 resources.getDrawable(R.drawable.tile_yellow_lit, null)
@@ -174,8 +174,8 @@ class GameFragment(private val player: SequencePlayer) :
                         }
                     }
                     MotionEvent.ACTION_UP, MotionEvent.ACTION_POINTER_INDEX_SHIFT -> {
-                        if (motionEvent.action == MotionEvent.ACTION_POINTER_INDEX_SHIFT
-                            || userInputMode
+                        if (motionEvent.action == MotionEvent.ACTION_POINTER_INDEX_SHIFT ||
+                            userInputMode
                         ) {
                             view.setImageDrawable(
                                 resources.getDrawable(R.drawable.tile_yellow_unlit, null)
