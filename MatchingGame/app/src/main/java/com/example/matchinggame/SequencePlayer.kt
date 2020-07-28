@@ -41,8 +41,7 @@ class SequencePlayer(private val context: Context) {
 
 //        p1Frag.acceptUserInput()
 //        p2Frag?.acceptUserInput()
-        }
-        catch (e: Exception) {
+        } catch (e: Exception) {
             Log.e(this.javaClass.toString(), e.message.toString())
         }
     }
