@@ -2,11 +2,9 @@ package com.example.matchinggame
 
 import android.os.Handler
 import android.util.Log
-import android.view.MotionEvent
 import com.example.matchinggame.model.SequenceGenerator
 import com.example.matchinggame.model.SequenceGenerator.Companion.ButtonColors
 import kotlinx.coroutines.Runnable
-import java.lang.Thread.sleep
 
 class SequencePlayer {
     companion object {
