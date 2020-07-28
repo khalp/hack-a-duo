@@ -1,8 +1,11 @@
 package com.example.matchinggame
 
+import android.os.Handler
 import android.util.Log
+import android.view.MotionEvent
 import com.example.matchinggame.model.SequenceGenerator
 import com.example.matchinggame.model.SequenceGenerator.Companion.ButtonColors
+import kotlinx.coroutines.Runnable
 
 class SequencePlayer {
     companion object {
@@ -34,14 +37,25 @@ class SequencePlayer {
 
             // Play generated sequence
             val sequence = SequenceGenerator.generateSequence(sequenceLength)
-            for (bc in sequence) {
-                p1Frag.playNote(bc)
-                // p2Frag?.playNote(bc)
-            }
+            val delay = 500
 
-            // Enable user input
-            p1Frag.enableButtons()
-            p2Frag?.enableButtons()
+            var handler = Handler()
+            for (bc in 0 until sequence.size) {
+                handler.postDelayed(Runnable {
+                    p1Frag.playNote(sequence[bc])
+                    Log.d("Delayed", "note happened")
+                }, (bc * delay).toLong())
+                handler = Handler()
+            }
+            handler.postDelayed(Runnable {
+                p1Frag.note.stop()
+                p1Frag.triggerButton(MotionEvent.ACTION_UP)
+
+                // Enable user input
+                p1Frag.enableButtons()
+                p2Frag?.enableButtons()
+                Log.d("Delayed", "note ended")
+            }, (sequence.size * delay).toLong())
 
             return sequence
         } catch (e: Exception) {

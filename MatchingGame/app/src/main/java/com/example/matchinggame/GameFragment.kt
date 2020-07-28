@@ -24,6 +24,7 @@ class GameFragment(private val player: SequencePlayer) : Fragment(), SequenceLis
     override var sequence: Array<ButtonColors>? = null
 
     // Tones to play with buttons
+    override lateinit var note: MediaPlayer
     override lateinit var orangeNote: MediaPlayer
     override lateinit var greenNote: MediaPlayer
     override lateinit var blueNote: MediaPlayer
@@ -42,6 +43,7 @@ class GameFragment(private val player: SequencePlayer) : Fragment(), SequenceLis
         greenNote = MediaPlayer.create(requireContext(), R.raw.e)
         blueNote = MediaPlayer.create(requireContext(), R.raw.g)
         yellowNote = MediaPlayer.create(requireContext(), R.raw.a)
+        note = MediaPlayer()
     }
 
     override fun onCreateView(
@@ -121,7 +123,7 @@ class GameFragment(private val player: SequencePlayer) : Fragment(), SequenceLis
                 }
             }
         }
-        if (motionEvent.action == MotionEvent.ACTION_UP)
+        if (motionEvent.action == MotionEvent.ACTION_UP && userInputMode)
             view.performClick()
 
         return true

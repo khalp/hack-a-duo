@@ -1,6 +1,8 @@
 package com.example.matchinggame
 
+import android.graphics.drawable.Drawable
 import android.media.MediaPlayer
+import android.view.MotionEvent
 import android.widget.ImageView
 import com.example.matchinggame.model.SequenceGenerator.Companion.ButtonColors as ButtonColors
 
@@ -15,6 +17,7 @@ interface SequenceListener {
     var sequence: Array<ButtonColors>?
 
     // Tones to play with buttons
+    var note: MediaPlayer
     var orangeNote: MediaPlayer
     var greenNote: MediaPlayer
     var blueNote: MediaPlayer
@@ -27,7 +30,8 @@ interface SequenceListener {
     var btn_yellow: ImageView
 
     fun playNote(buttonColor: ButtonColors) {
-        lateinit var note: MediaPlayer
+        note.stop()
+        triggerButton(MotionEvent.ACTION_UP)
 
         // TODO: put in actual code for lighting up button
         when (buttonColor) {
@@ -45,11 +49,12 @@ interface SequenceListener {
             }
         }
 
+        triggerButton(MotionEvent.ACTION_DOWN)
         note.start()
         // REVISIT: intended to pause all actions until note has finished playing, but may
         // not be necessary/efficient or cause infinite looping haha (maybe we need threads?)
-        while (note.isPlaying) {
-        }
+        //while (note.isPlaying) {
+        //}
     }
 
     fun disableButtons() {
@@ -68,6 +73,26 @@ interface SequenceListener {
         btn_yellow.isClickable = true
 
         userInputMode = true
+    }
+
+    fun triggerButton(motionEvent: Int) {
+        if (!userInputMode) {
+            val event = MotionEvent.obtain(0, 0, motionEvent, 0f, 0f, 0)
+            when (note) {
+                orangeNote ->
+                    btn_orange.dispatchTouchEvent(event)
+
+                greenNote ->
+                    btn_green.dispatchTouchEvent(event)
+
+                blueNote ->
+                    btn_blue.dispatchTouchEvent(event)
+
+                yellowNote ->
+                    btn_yellow.dispatchTouchEvent(event)
+            }
+            event.recycle()
+        }
     }
 
     fun checkUserInput(): Boolean
