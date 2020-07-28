@@ -1,6 +1,5 @@
 package com.example.matchinggame
 
-import android.graphics.drawable.Drawable
 import android.media.MediaPlayer
 import android.view.MotionEvent
 import android.widget.ImageView
@@ -17,7 +16,6 @@ interface SequenceListener {
     var sequence: Array<ButtonColors>?
 
     // Tones to play with buttons
-    var note: MediaPlayer
     var orangeNote: MediaPlayer
     var greenNote: MediaPlayer
     var blueNote: MediaPlayer
@@ -29,66 +27,37 @@ interface SequenceListener {
     var btn_blue: ImageView
     var btn_yellow: ImageView
 
-    fun playNote(buttonColor: ButtonColors) {
-        note.stop()
-        triggerButton(MotionEvent.ACTION_UP)
+    fun playNote(buttonColor: ButtonColors, start: Boolean = true) {
+        if (start)
+            triggerButton(MotionEvent.ACTION_DOWN, buttonColor)
+    }
 
-        // TODO: put in actual code for lighting up button
-        when (buttonColor) {
-            ButtonColors.ORANGE -> {
-                note = orangeNote
-            }
-            ButtonColors.GREEN -> {
-                note = greenNote
-            }
-            ButtonColors.BLUE -> {
-                note = blueNote
-            }
-            ButtonColors.YELLOW -> {
-                note = yellowNote
-            }
-        }
-
-        triggerButton(MotionEvent.ACTION_DOWN)
-        note.start()
-        // REVISIT: intended to pause all actions until note has finished playing, but may
-        // not be necessary/efficient or cause infinite looping haha (maybe we need threads?)
-        //while (note.isPlaying) {
-        //}
+    fun stopNote(buttonColor: ButtonColors) {
+        triggerButton(MotionEvent.ACTION_UP, buttonColor)
     }
 
     fun disableButtons() {
-        btn_orange.isClickable = false
-        btn_green.isClickable = false
-        btn_blue.isClickable = false
-        btn_yellow.isClickable = false
-
         userInputMode = false
     }
 
     fun enableButtons() {
-        btn_orange.isClickable = true
-        btn_green.isClickable = true
-        btn_blue.isClickable = true
-        btn_yellow.isClickable = true
-
         userInputMode = true
     }
 
-    fun triggerButton(motionEvent: Int) {
+    fun triggerButton(motionEvent: Int, buttonColor: ButtonColors) {
         if (!userInputMode) {
             val event = MotionEvent.obtain(0, 0, motionEvent, 0f, 0f, 0)
-            when (note) {
-                orangeNote ->
+            when (buttonColor) {
+                ButtonColors.ORANGE ->
                     btn_orange.dispatchTouchEvent(event)
 
-                greenNote ->
+                ButtonColors.GREEN ->
                     btn_green.dispatchTouchEvent(event)
 
-                blueNote ->
+                ButtonColors.BLUE ->
                     btn_blue.dispatchTouchEvent(event)
 
-                yellowNote ->
+                ButtonColors.YELLOW ->
                     btn_yellow.dispatchTouchEvent(event)
             }
             event.recycle()
