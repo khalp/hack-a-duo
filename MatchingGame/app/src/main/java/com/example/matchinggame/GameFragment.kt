@@ -91,65 +91,97 @@ class GameFragment(private val player: SequencePlayer) :
         when (view) {
             btn_blue -> {
                 when (motionEvent.action) {
-                    MotionEvent.ACTION_DOWN -> {
-                        view.setImageDrawable(
-                            resources.getDrawable(R.drawable.tile_blue_lit, null)
-                        )
-                        blueNote.start()
+                    MotionEvent.ACTION_DOWN, MotionEvent.ACTION_POINTER_INDEX_MASK -> {
+                        if (motionEvent.action == MotionEvent.ACTION_POINTER_INDEX_MASK
+                            || userInputMode
+                        ) {
+                            view.setImageDrawable(
+                                resources.getDrawable(R.drawable.tile_blue_lit, null)
+                            )
+                            blueNote.start()
+                        }
                     }
-                    MotionEvent.ACTION_UP -> {
-                        view.setImageDrawable(
-                            resources.getDrawable(R.drawable.tile_blue_unlit, null)
-                        )
-                        blueNote.pause()
+                    MotionEvent.ACTION_UP, MotionEvent.ACTION_POINTER_INDEX_SHIFT -> {
+                        if (motionEvent.action == MotionEvent.ACTION_POINTER_INDEX_SHIFT
+                            || userInputMode
+                        ) {
+                            view.setImageDrawable(
+                                resources.getDrawable(R.drawable.tile_blue_unlit, null)
+                            )
+                            blueNote.pause()
+                        }
                     }
                 }
             }
             btn_green -> {
                 when (motionEvent.action) {
-                    MotionEvent.ACTION_DOWN -> {
-                        view.setImageDrawable(
-                            resources.getDrawable(R.drawable.tile_green_lit, null)
-                        )
-                        greenNote.start()
+                    MotionEvent.ACTION_DOWN, MotionEvent.ACTION_POINTER_INDEX_MASK -> {
+                        if (motionEvent.action == MotionEvent.ACTION_POINTER_INDEX_MASK
+                            || userInputMode
+                        ) {
+                            view.setImageDrawable(
+                                resources.getDrawable(R.drawable.tile_green_lit, null)
+                            )
+                            greenNote.start()
+                        }
                     }
-                    MotionEvent.ACTION_UP -> {
-                        view.setImageDrawable(
-                            resources.getDrawable(R.drawable.tile_green_unlit, null)
-                        )
-                        greenNote.pause()
+                    MotionEvent.ACTION_UP, MotionEvent.ACTION_POINTER_INDEX_SHIFT -> {
+                        if (motionEvent.action == MotionEvent.ACTION_POINTER_INDEX_SHIFT
+                            || userInputMode
+                        ) {
+                            view.setImageDrawable(
+                                resources.getDrawable(R.drawable.tile_green_unlit, null)
+                            )
+                            greenNote.pause()
+                        }
                     }
                 }
             }
             btn_orange -> {
                 when (motionEvent.action) {
-                    MotionEvent.ACTION_DOWN -> {
-                        view.setImageDrawable(
-                            resources.getDrawable(R.drawable.tile_orange_lit, null)
-                        )
-                        orangeNote.start()
+                    MotionEvent.ACTION_DOWN, MotionEvent.ACTION_POINTER_INDEX_MASK -> {
+                        if (motionEvent.action == MotionEvent.ACTION_POINTER_INDEX_MASK
+                            || userInputMode
+                        ) {
+                            view.setImageDrawable(
+                                resources.getDrawable(R.drawable.tile_orange_lit, null)
+                            )
+                            orangeNote.start()
+                        }
                     }
-                    MotionEvent.ACTION_UP -> {
-                        view.setImageDrawable(
-                            resources.getDrawable(R.drawable.tile_orange_unlit, null)
-                        )
-                        orangeNote.pause()
+                    MotionEvent.ACTION_UP, MotionEvent.ACTION_POINTER_INDEX_SHIFT -> {
+                        if (motionEvent.action == MotionEvent.ACTION_POINTER_INDEX_SHIFT
+                            || userInputMode
+                        ) {
+                            view.setImageDrawable(
+                                resources.getDrawable(R.drawable.tile_orange_unlit, null)
+                            )
+                            orangeNote.pause()
+                        }
                     }
                 }
             }
             btn_yellow -> {
                 when (motionEvent.action) {
-                    MotionEvent.ACTION_DOWN -> {
-                        view.setImageDrawable(
-                            resources.getDrawable(R.drawable.tile_yellow_lit, null)
-                        )
-                        yellowNote.start()
+                    MotionEvent.ACTION_DOWN, MotionEvent.ACTION_POINTER_INDEX_MASK -> {
+                        if (motionEvent.action == MotionEvent.ACTION_POINTER_INDEX_MASK
+                            || userInputMode
+                        ) {
+                            view.setImageDrawable(
+                                resources.getDrawable(R.drawable.tile_yellow_lit, null)
+                            )
+                            yellowNote.start()
+                        }
                     }
-                    MotionEvent.ACTION_UP -> {
-                        view.setImageDrawable(
-                            resources.getDrawable(R.drawable.tile_yellow_unlit, null)
-                        )
-                        yellowNote.pause()
+                    MotionEvent.ACTION_UP, MotionEvent.ACTION_POINTER_INDEX_SHIFT -> {
+                        if (motionEvent.action == MotionEvent.ACTION_POINTER_INDEX_SHIFT
+                            || userInputMode
+                        ) {
+                            view.setImageDrawable(
+                                resources.getDrawable(R.drawable.tile_yellow_unlit, null)
+                            )
+                            yellowNote.pause()
+                        }
                     }
                 }
             }
