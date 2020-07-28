@@ -27,13 +27,12 @@ interface SequenceListener {
     var btn_blue: ImageView
     var btn_yellow: ImageView
 
-    fun playNote(buttonColor: ButtonColors, start: Boolean = true) {
-        if (start)
-            triggerButton(MotionEvent.ACTION_DOWN, buttonColor)
+    fun playNote(buttonColor: ButtonColors) {
+        triggerButton(MotionEvent.ACTION_POINTER_INDEX_MASK, buttonColor)
     }
 
     fun stopNote(buttonColor: ButtonColors) {
-        triggerButton(MotionEvent.ACTION_UP, buttonColor)
+        triggerButton(MotionEvent.ACTION_POINTER_INDEX_SHIFT, buttonColor)
     }
 
     fun disableButtons() {
