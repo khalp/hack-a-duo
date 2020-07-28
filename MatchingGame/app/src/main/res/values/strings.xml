@@ -11,4 +11,11 @@
     <string name="level">Level %1$d</string>
     <string name="restart">Restart</string>
     <string name="game_over">Game Over</string>
+    <string name="surprise">Surprise me ;)</string>
+    <string name="ok">OK</string>
+    <string name="welcome">Welcome to Protractor Mode!</string>
+    <string name="you_heard">Yes, you heard that correctly: Protractor Mode! All you need to do is
+        bend the Surface Duo and check the hinge angle measurement. Now go explore this big
+        beautiful world and measure some angles with your bendy phone!</string>
+    <string name="angle">Angle: %1$f%2$s</string>
 </resources>

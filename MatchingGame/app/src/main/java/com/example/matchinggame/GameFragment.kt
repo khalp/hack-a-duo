@@ -200,9 +200,17 @@ class GameFragment :
 
         val builder = AlertDialog.Builder(requireContext())
         builder.setMessage(message).setCancelable(false)
-            .setPositiveButton("OK") { dialog, _ ->
+            .setPositiveButton(resources.getString(R.string.ok)) { dialog, _ ->
                 dialog.dismiss()
             }
+
+        if (finished)
+            builder.setPositiveButton(resources.getString(R.string.surprise)) { dialog, _ ->
+                dialog.dismiss()
+                parentFragmentManager.beginTransaction()
+                    .replace(R.id.first_container_id, ProtractorFragment(), null)
+                    .commit()
+            }.setCancelable(true)
 
         val dialog = builder.create()
         dialog.setTitle(resources.getString(R.string.game_over))
