@@ -30,6 +30,7 @@ class GameFragment(private val player: SequencePlayer) :
     override var level: Int = 1
     override var sequence: Array<ButtonColors>? = null
 
+class GameFragment : Fragment(), SequenceListener, View.OnTouchListener {
     // Tones to play with buttons
     override lateinit var orangeNote: MediaPlayer
     override lateinit var greenNote: MediaPlayer
@@ -41,6 +42,13 @@ class GameFragment(private val player: SequencePlayer) :
     override lateinit var btn_green: ImageView
     override lateinit var btn_blue: ImageView
     override lateinit var btn_yellow: ImageView
+
+    companion object {
+        lateinit var player: SequencePlayer
+        internal fun newInstance(p: SequencePlayer) = GameFragment().apply {
+            player = p
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -61,12 +69,27 @@ class GameFragment(private val player: SequencePlayer) :
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view = inflater.inflate(R.layout.fragment_game, container, false)
+        var view: View
 
-        btn_blue = view.findViewById(R.id.btn_blue)
-        btn_green = view.findViewById(R.id.btn_green)
-        btn_orange = view.findViewById(R.id.btn_orange)
-        btn_yellow = view.findViewById(R.id.btn_yellow)
+        if (container?.id == R.id.first_container_id) {
+            view = inflater.inflate(R.layout.fragment_game, container, false)
+
+            btn_blue = view.findViewById(R.id.btn_blue)
+            btn_green = view.findViewById(R.id.btn_green)
+            btn_orange = view.findViewById(R.id.btn_orange)
+            btn_yellow = view.findViewById(R.id.btn_yellow)
+
+            player.initP1Frag(this)
+        } else {
+            view = inflater.inflate(R.layout.fragment_game_p2, container, false)
+
+            btn_blue = view.findViewById(R.id.btn_blue_p2)
+            btn_green = view.findViewById(R.id.btn_green_p2)
+            btn_orange = view.findViewById(R.id.btn_orange_p2)
+            btn_yellow = view.findViewById(R.id.btn_yellow_p2)
+
+            player.initP2Frag(this)
+        }
 
         setListeners(btn_orange, ButtonColors.ORANGE)
         setListeners(btn_green, ButtonColors.GREEN)
