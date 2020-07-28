@@ -124,4 +124,3 @@ class GameFragment(private val player: SequencePlayer) : Fragment(), SequenceLis
         TODO("Not yet implemented")
     }
 }
-

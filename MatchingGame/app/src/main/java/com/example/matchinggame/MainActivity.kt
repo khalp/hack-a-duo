@@ -2,7 +2,6 @@ package com.example.matchinggame
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import com.example.matchinggame.model.SequenceGenerator
 import com.microsoft.device.dualscreen.core.ScreenHelper
 
 class MainActivity : AppCompatActivity() {
