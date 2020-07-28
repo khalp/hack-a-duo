@@ -1,5 +1,7 @@
 package com.example.matchinggame
 
+import android.app.AlertDialog
+import android.content.DialogInterface
 import android.media.MediaPlayer
 import android.os.Bundle
 import android.util.Log
@@ -9,6 +11,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
+import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.example.matchinggame.model.SequenceGenerator.Companion.ButtonColors as ButtonColors
@@ -17,6 +20,7 @@ class GameFragment(private val player: SequencePlayer) :
     Fragment(),
     SequenceListener,
     View.OnTouchListener {
+
     // Keeps track of button mode (sequence play vs. user input) and presses
     override var userInputMode = false
     override val presses = ArrayList<ButtonColors>(SequencePlayer.LENGTH_END)
@@ -71,17 +75,39 @@ class GameFragment(private val player: SequencePlayer) :
 
         if (container?.id == R.id.first_container_id) {
             player.initP1Frag(this)
-            // Give only player 1 the control to start the game
-            view.findViewById<Button>(R.id.start_button).setOnClickListener {
+            // Set up start/restart game buttons
+            view.findViewById<Button>(R.id.start_button).setOnClickListener { button ->
+                view?.findViewById<TextView>(R.id.level)?.let {
+                    it.text = resources.getString(R.string.level, level)
+                    it.visibility = View.VISIBLE
+                }
                 sequence = player.playSequence()
+
+                button.visibility = View.INVISIBLE
+            }
+            view.findViewById<Button>(R.id.restart_button).setOnClickListener {
+                player.restart()
             }
         } else {
             player.initP2Frag(this)
-            // Remove start button from player 2's screen
+            // Remove start/restart button from player 2's screen
             view.findViewById<Button>(R.id.start_button).visibility = View.GONE
+            view.findViewById<Button>(R.id.restart_button).visibility = View.GONE
         }
 
         return view
+    }
+
+    override fun resetControlsAppearance() {
+        view?.findViewById<Button>(R.id.start_button)?.let {
+            it.text = resources.getString(R.string.start_game)
+            it.visibility = View.VISIBLE
+
+        }
+        view?.findViewById<TextView>(R.id.level)?.let {
+            it.text = resources.getString(R.string.level, level)
+            it.visibility = View.INVISIBLE
+        }
     }
 
     override fun onTouch(view: View, motionEvent: MotionEvent): Boolean {
@@ -213,14 +239,25 @@ class GameFragment(private val player: SequencePlayer) :
         level++
         readyToCheck = false
         presses.clear()
-        view?.findViewById<Button>(R.id.start_button)?.text =
-            resources.getString(R.string.start_level, level)
+        view?.findViewById<Button>(R.id.start_button)?.let {
+            it.text = resources.getString(R.string.start_level, level)
+            it.visibility = View.VISIBLE
+        }
     }
 
     override fun displayEndScreen(resId: Int, finished: Boolean) {
         val message = if (finished) resources.getString(resId)
         else "${resources.getString(resId)} $level"
-        Toast.makeText(requireContext(), message, Toast.LENGTH_LONG).show()
+
+        val builder = AlertDialog.Builder(requireContext())
+        builder.setMessage(message).setCancelable(false)
+            .setPositiveButton("OK", DialogInterface.OnClickListener { dialog, _ ->
+                dialog.dismiss()
+            })
+
+        val dialog = builder.create()
+        dialog.setTitle(resources.getString(R.string.game_over))
+        dialog.show()
     }
 
     override fun checkUserInput(): Boolean {
