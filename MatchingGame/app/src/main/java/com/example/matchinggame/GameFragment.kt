@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.example.matchinggame.model.SequenceGenerator.Companion.ButtonColors as ButtonColors
 
@@ -16,8 +17,10 @@ class GameFragment(private val player: SequencePlayer) : Fragment(), SequenceLis
     // Keeps track of button mode (sequence play vs. user input) and presses
     override var userInputMode = false
     override val presses = ArrayList<ButtonColors>(SequencePlayer.LENGTH_END)
+    override var readyToCheck = false
 
     // Game stats
+    override var level: Int = 1
     override var sequence: Array<ButtonColors>? = null
 
     // Tones to play with buttons
@@ -64,8 +67,7 @@ class GameFragment(private val player: SequencePlayer) : Fragment(), SequenceLis
             view.findViewById<Button>(R.id.start_button).setOnClickListener {
                 sequence = player.playSequence()
             }
-        }
-        else {
+        } else {
             player.initP2Frag(this)
             // Remove start button from player 2's screen
             view.findViewById<Button>(R.id.start_button).visibility = View.GONE
@@ -128,33 +130,41 @@ class GameFragment(private val player: SequencePlayer) : Fragment(), SequenceLis
     private fun setListeners(btn: ImageView, buttonColor: ButtonColors) {
         btn.setOnTouchListener(this)
         btn.setOnClickListener {
-            Log.d(this::class.java.toString(), "Button pressed: ${buttonColor.toString()}")
+            Log.d(this::class.java.toString(), "Button pressed: $buttonColor")
             if (userInputMode) {
                 playNote(buttonColor)
                 presses.add(buttonColor)
 
                 if (presses.size == sequence?.size) {
-                    checkUserInput()
+                    userInputMode = false
+                    readyToCheck = true
+                    player.checkUserInput()
                 }
             }
         }
     }
 
-    fun gameOver() {
-        TODO("Not yet implemented")
+    override fun increaseLevel() {
+        level++
+        readyToCheck = false
+        presses.clear()
+        view?.findViewById<Button>(R.id.start_button)?.text = resources.getString(R.string.start_level, level)
     }
 
-    private fun checkUserInput() {
+
+    override fun displayEndScreen(resId: Int, finished: Boolean) {
+        val message = if (finished) resources.getString(resId)
+        else "${resources.getString(resId)} $level"
+        Toast.makeText(requireContext(), message, Toast.LENGTH_LONG).show()
+    }
+
+    override fun checkUserInput(): Boolean {
         var passed = true
 
         for (i in 0 until presses.size) {
             passed = passed && presses[i] == sequence!![i]
         }
 
-        if (passed) {
-            sequence = player.increaseLevel()
-        } else {
-            gameOver()
-        }
+        return passed
     }
 }
