@@ -148,6 +148,12 @@ class SequencePlayer {
             }
         }
 
-        // TODO: reset whole game so app doesn't have to be restarted
+        restart()
+    }
+
+    fun restart() {
+        p1Frag.restart()
+        p2Frag?.restart()
+        sequenceLength = LENGTH_START
     }
 }

@@ -63,7 +63,17 @@ interface SequenceListener {
         }
     }
 
+    fun restart() {
+        userInputMode = false
+        presses.clear()
+        readyToCheck = false
+        level = 1
+        sequence = null
+        resetControlsAppearance()
+    }
+
     fun checkUserInput(): Boolean
     fun displayEndScreen(resId: Int, finished: Boolean)
     fun increaseLevel()
+    fun resetControlsAppearance()
 }
