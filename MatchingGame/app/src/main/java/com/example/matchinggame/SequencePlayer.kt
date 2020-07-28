@@ -41,23 +41,32 @@ class SequencePlayer {
 
             var handler = Handler()
             for (i in sequence.indices) {
-                handler.postDelayed({
-                    if (i > 0) {
-                        p1Frag.stopNote(sequence[i - 1])
-                    }
-                }, i * noteLength + (i - 1) * noteDelay)
-                handler.postDelayed(Runnable {
-                    p1Frag.playNote(sequence[i])
-                }, i * (noteLength + noteDelay))
+                handler.postDelayed(
+                    {
+                        if (i > 0) {
+                            p1Frag.stopNote(sequence[i - 1])
+                        }
+                    },
+                    i * noteLength + (i - 1) * noteDelay
+                )
+                handler.postDelayed(
+                    Runnable {
+                        p1Frag.playNote(sequence[i])
+                    },
+                    i * (noteLength + noteDelay)
+                )
                 handler = Handler()
             }
-            handler.postDelayed(Runnable {
-                p1Frag.stopNote(sequence[sequence.lastIndex])
+            handler.postDelayed(
+                Runnable {
+                    p1Frag.stopNote(sequence[sequence.lastIndex])
 
-                // Enable user input
-                p1Frag.enableButtons()
-                p2Frag?.enableButtons()
-            }, sequence.size * noteLength + (sequence.size - 1) * noteDelay)
+                    // Enable user input
+                    p1Frag.enableButtons()
+                    p2Frag?.enableButtons()
+                },
+                sequence.size * noteLength + (sequence.size - 1) * noteDelay
+            )
 
             return sequence
         } catch (e: Exception) {
