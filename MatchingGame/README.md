@@ -45,4 +45,4 @@ This app contains a secret feature that utilizes the unique qualities of a dual 
 
 ## Contributing
 
-This project welcomes contributions and suggestions.
+This project welcomes contributions and suggestions. It is also under the [Apache software license](https://apache.org/licenses/).
