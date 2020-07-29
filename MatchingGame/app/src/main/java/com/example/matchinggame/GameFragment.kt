@@ -16,7 +16,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.example.matchinggame.model.SequenceGenerator.Companion.ButtonColors as ButtonColors
 
-class GameFragment(private val player: SequencePlayer) :
+class GameFragment() :
     Fragment(),
     SequenceListener,
     View.OnTouchListener {
@@ -30,7 +30,6 @@ class GameFragment(private val player: SequencePlayer) :
     override var level: Int = 1
     override var sequence: Array<ButtonColors>? = null
 
-class GameFragment : Fragment(), SequenceListener, View.OnTouchListener {
     // Tones to play with buttons
     override lateinit var orangeNote: MediaPlayer
     override lateinit var greenNote: MediaPlayer
@@ -69,7 +68,7 @@ class GameFragment : Fragment(), SequenceListener, View.OnTouchListener {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        var view: View
+        val view: View
 
         if (container?.id == R.id.first_container_id) {
             view = inflater.inflate(R.layout.fragment_game, container, false)
@@ -79,24 +78,6 @@ class GameFragment : Fragment(), SequenceListener, View.OnTouchListener {
             btn_orange = view.findViewById(R.id.btn_orange)
             btn_yellow = view.findViewById(R.id.btn_yellow)
 
-            player.initP1Frag(this)
-        } else {
-            view = inflater.inflate(R.layout.fragment_game_p2, container, false)
-
-            btn_blue = view.findViewById(R.id.btn_blue_p2)
-            btn_green = view.findViewById(R.id.btn_green_p2)
-            btn_orange = view.findViewById(R.id.btn_orange_p2)
-            btn_yellow = view.findViewById(R.id.btn_yellow_p2)
-
-            player.initP2Frag(this)
-        }
-
-        setListeners(btn_orange, ButtonColors.ORANGE)
-        setListeners(btn_green, ButtonColors.GREEN)
-        setListeners(btn_blue, ButtonColors.BLUE)
-        setListeners(btn_yellow, ButtonColors.YELLOW)
-
-        if (container?.id == R.id.first_container_id) {
             player.initP1Frag(this)
             // Set up start/restart game buttons
             view.findViewById<Button>(R.id.start_button).setOnClickListener { button ->
@@ -112,11 +93,21 @@ class GameFragment : Fragment(), SequenceListener, View.OnTouchListener {
                 player.restart()
             }
         } else {
+            view = inflater.inflate(R.layout.fragment_game_p2, container, false)
+
+            btn_blue = view.findViewById(R.id.btn_blue_p2)
+            btn_green = view.findViewById(R.id.btn_green_p2)
+            btn_orange = view.findViewById(R.id.btn_orange_p2)
+            btn_yellow = view.findViewById(R.id.btn_yellow_p2)
+
             player.initP2Frag(this)
             // Remove start/restart button from player 2's screen
-            view.findViewById<Button>(R.id.start_button).visibility = View.GONE
-            view.findViewById<Button>(R.id.restart_button).visibility = View.GONE
         }
+
+        setListeners(btn_orange, ButtonColors.ORANGE)
+        setListeners(btn_green, ButtonColors.GREEN)
+        setListeners(btn_blue, ButtonColors.BLUE)
+        setListeners(btn_yellow, ButtonColors.YELLOW)
 
         return view
     }
