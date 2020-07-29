@@ -29,8 +29,6 @@ dependencies {
 
     implementation microsoftDependencies.dualScreenLayouts
     implementation microsoftDependencies.core
-    implementation microsoftDependencies.bottomNavigation
-    implementation microsoftDependencies.tabs
 
     testImplementation testDependencies.junit
     androidTestImplementation instrumentationTestDependencies.junit

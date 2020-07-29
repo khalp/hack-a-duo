@@ -12,17 +12,15 @@ import android.widget.TextView
 import androidx.core.content.ContextCompat.getSystemService
 import androidx.fragment.app.Fragment
 
-
 class ProtractorFragment : Fragment() {
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_protractor, container, false)
-
         setupSensors()
-
         return view
     }
 
@@ -31,9 +29,8 @@ class ProtractorFragment : Fragment() {
     }
 
     private lateinit var sensorManager: SensorManager
-    private var mHingeAngleSensor: Sensor? = null
-    private var mSensorListener: SensorEventListener? = null
-
+    private lateinit var hingeAngleSensor: Sensor
+    private lateinit var sensorListener: SensorEventListener
 
     private fun setupSensors() {
         sensorManager = getSystemService<SensorManager>(
@@ -44,36 +41,34 @@ class ProtractorFragment : Fragment() {
             sensorManager.getSensorList(Sensor.TYPE_ALL)
         for (sensor in sensorList) {
             if (sensor.name.contains(HINGE_ANGLE_SENSOR_NAME)) {
-                mHingeAngleSensor = sensor
+                hingeAngleSensor = sensor
             }
         }
-        mSensorListener = object : SensorEventListener {
+        sensorListener = object : SensorEventListener {
             override fun onSensorChanged(event: SensorEvent) {
-                if (event.sensor == mHingeAngleSensor) {
+                if (event.sensor == hingeAngleSensor) {
                     view?.findViewById<TextView>(R.id.angle)?.text =
                         resources.getString(R.string.angle, event.values[0], "\u00B0")
                 }
             }
 
-            override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {
-                //TODO
-            }
+            override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {}
         }
     }
 
     override fun onPause() {
         super.onPause()
-        if (mHingeAngleSensor != null) {
-            sensorManager!!.unregisterListener(mSensorListener, mHingeAngleSensor)
+        if (this::hingeAngleSensor.isInitialized) {
+            sensorManager.unregisterListener(sensorListener, hingeAngleSensor)
         }
     }
 
     override fun onResume() {
         super.onResume()
-        if (mHingeAngleSensor != null) {
-            sensorManager!!.registerListener(
-                mSensorListener,
-                mHingeAngleSensor,
+        if (this::hingeAngleSensor.isInitialized) {
+            sensorManager.registerListener(
+                sensorListener,
+                hingeAngleSensor,
                 SensorManager.SENSOR_DELAY_NORMAL
             )
         }

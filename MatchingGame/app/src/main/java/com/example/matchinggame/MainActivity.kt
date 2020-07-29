@@ -7,7 +7,6 @@ import com.microsoft.device.dualscreen.core.ScreenHelper
 class MainActivity : AppCompatActivity() {
     companion object {
         const val GAME = "game"
-        const val MULTIPLAYER = "multi"
     }
 
     private lateinit var player: SequencePlayer
