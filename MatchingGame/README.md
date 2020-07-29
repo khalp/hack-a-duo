@@ -10,7 +10,7 @@ This Kotlin application implements a simple pattern matching game that can be pl
 ## Running the sample
 
 * Start Android Studio.
-* Open the PhotoEditor project: **File > Open**, navigate to file location of the  the **PhotoEditor** folder, then click **OK**.
+* Open the MatchingGame project: **File > Open**, navigate to file location of the  the **MatchingGame** folder, then click **OK**.
 * Build your project: **Build > Make Project** or **Ctrl+F9**
 * Start the Surface Duo emulator
 * Select **"Microsoft SurfaceDuoEmulator API 29"** or **"Virtual Device"** from the list of Running Devices.
