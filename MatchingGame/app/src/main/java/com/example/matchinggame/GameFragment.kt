@@ -1,7 +1,7 @@
 package com.example.matchinggame
 
 import android.app.AlertDialog
-import android.content.DialogInterface
+import android.graphics.drawable.Drawable
 import android.media.MediaPlayer
 import android.os.Bundle
 import android.util.Log
@@ -12,11 +12,10 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.example.matchinggame.model.SequenceGenerator.Companion.ButtonColors as ButtonColors
 
-class GameFragment() :
+class GameFragment :
     Fragment(),
     SequenceListener,
     View.OnTouchListener {
@@ -68,46 +67,33 @@ class GameFragment() :
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val view: View
+        val view: View = inflater.inflate(R.layout.fragment_game, container, false)
 
-        if (container?.id == R.id.first_container_id) {
-            view = inflater.inflate(R.layout.fragment_game, container, false)
-
-            btn_blue = view.findViewById(R.id.btn_blue)
-            btn_green = view.findViewById(R.id.btn_green)
-            btn_orange = view.findViewById(R.id.btn_orange)
-            btn_yellow = view.findViewById(R.id.btn_yellow)
-
-            player.initP1Frag(this)
-            // Set up start/restart game buttons
-            view.findViewById<Button>(R.id.start_button).setOnClickListener { button ->
-                view?.findViewById<TextView>(R.id.level)?.let {
-                    it.text = resources.getString(R.string.level, level)
-                    it.visibility = View.VISIBLE
-                }
-                sequence = player.playSequence()
-
-                button.visibility = View.INVISIBLE
-            }
-            view.findViewById<Button>(R.id.restart_button).setOnClickListener {
-                player.restart()
-            }
-        } else {
-            view = inflater.inflate(R.layout.fragment_game_p2, container, false)
-
-            btn_blue = view.findViewById(R.id.btn_blue_p2)
-            btn_green = view.findViewById(R.id.btn_green_p2)
-            btn_orange = view.findViewById(R.id.btn_orange_p2)
-            btn_yellow = view.findViewById(R.id.btn_yellow_p2)
-
-            player.initP2Frag(this)
-            // Remove start/restart button from player 2's screen
-        }
+        // Set up game buttons
+        btn_blue = view.findViewById(R.id.btn_blue)
+        btn_green = view.findViewById(R.id.btn_green)
+        btn_orange = view.findViewById(R.id.btn_orange)
+        btn_yellow = view.findViewById(R.id.btn_yellow)
 
         setListeners(btn_orange, ButtonColors.ORANGE)
         setListeners(btn_green, ButtonColors.GREEN)
         setListeners(btn_blue, ButtonColors.BLUE)
         setListeners(btn_yellow, ButtonColors.YELLOW)
+
+        // Initialize correct sequence player field with fragment
+        if (container?.id == R.id.first_container_id) {
+            player.initP1Frag(this)
+        } else {
+            player.initP2Frag(this)
+        }
+
+        // Set up start/restart game buttons
+        view.findViewById<Button>(R.id.start_button).setOnClickListener {
+            player.playSequence()
+        }
+        view.findViewById<Button>(R.id.restart_button).setOnClickListener {
+            player.restart()
+        }
 
         return view
     }
@@ -116,7 +102,6 @@ class GameFragment() :
         view?.findViewById<Button>(R.id.start_button)?.let {
             it.text = resources.getString(R.string.start_game)
             it.visibility = View.VISIBLE
-
         }
         view?.findViewById<TextView>(R.id.level)?.let {
             it.text = resources.getString(R.string.level, level)
@@ -129,108 +114,61 @@ class GameFragment() :
             return false
 
         when (view) {
-            btn_blue -> {
-                when (motionEvent.action) {
-                    MotionEvent.ACTION_DOWN, MotionEvent.ACTION_POINTER_INDEX_MASK -> {
-                        if (motionEvent.action == MotionEvent.ACTION_POINTER_INDEX_MASK ||
-                            userInputMode
-                        ) {
-                            view.setImageDrawable(
-                                resources.getDrawable(R.drawable.tile_blue_lit, null)
-                            )
-                            blueNote.start()
-                        }
-                    }
-                    MotionEvent.ACTION_UP, MotionEvent.ACTION_POINTER_INDEX_SHIFT -> {
-                        if (motionEvent.action == MotionEvent.ACTION_POINTER_INDEX_SHIFT ||
-                            userInputMode
-                        ) {
-                            view.setImageDrawable(
-                                resources.getDrawable(R.drawable.tile_blue_unlit, null)
-                            )
-                            blueNote.pause()
-                        }
-                    }
-                }
-            }
-            btn_green -> {
-                when (motionEvent.action) {
-                    MotionEvent.ACTION_DOWN, MotionEvent.ACTION_POINTER_INDEX_MASK -> {
-                        if (motionEvent.action == MotionEvent.ACTION_POINTER_INDEX_MASK ||
-                            userInputMode
-                        ) {
-                            view.setImageDrawable(
-                                resources.getDrawable(R.drawable.tile_green_lit, null)
-                            )
-                            greenNote.start()
-                        }
-                    }
-                    MotionEvent.ACTION_UP, MotionEvent.ACTION_POINTER_INDEX_SHIFT -> {
-                        if (motionEvent.action == MotionEvent.ACTION_POINTER_INDEX_SHIFT ||
-                            userInputMode
-                        ) {
-                            view.setImageDrawable(
-                                resources.getDrawable(R.drawable.tile_green_unlit, null)
-                            )
-                            greenNote.pause()
-                        }
-                    }
-                }
-            }
-            btn_orange -> {
-                when (motionEvent.action) {
-                    MotionEvent.ACTION_DOWN, MotionEvent.ACTION_POINTER_INDEX_MASK -> {
-                        if (motionEvent.action == MotionEvent.ACTION_POINTER_INDEX_MASK ||
-                            userInputMode
-                        ) {
-                            view.setImageDrawable(
-                                resources.getDrawable(R.drawable.tile_orange_lit, null)
-                            )
-                            orangeNote.start()
-                        }
-                    }
-                    MotionEvent.ACTION_UP, MotionEvent.ACTION_POINTER_INDEX_SHIFT -> {
-                        if (motionEvent.action == MotionEvent.ACTION_POINTER_INDEX_SHIFT ||
-                            userInputMode
-                        ) {
-                            view.setImageDrawable(
-                                resources.getDrawable(R.drawable.tile_orange_unlit, null)
-                            )
-                            orangeNote.pause()
-                        }
-                    }
-                }
-            }
-            btn_yellow -> {
-                when (motionEvent.action) {
-                    MotionEvent.ACTION_DOWN, MotionEvent.ACTION_POINTER_INDEX_MASK -> {
-                        if (motionEvent.action == MotionEvent.ACTION_POINTER_INDEX_MASK ||
-                            userInputMode
-                        ) {
-                            view.setImageDrawable(
-                                resources.getDrawable(R.drawable.tile_yellow_lit, null)
-                            )
-                            yellowNote.start()
-                        }
-                    }
-                    MotionEvent.ACTION_UP, MotionEvent.ACTION_POINTER_INDEX_SHIFT -> {
-                        if (motionEvent.action == MotionEvent.ACTION_POINTER_INDEX_SHIFT ||
-                            userInputMode
-                        ) {
-                            view.setImageDrawable(
-                                resources.getDrawable(R.drawable.tile_yellow_unlit, null)
-                            )
-                            yellowNote.pause()
-                        }
-                    }
-                }
-            }
+            btn_blue -> processTouchEvent(motionEvent.action, view, blueNote)
+            btn_green -> processTouchEvent(motionEvent.action, view, greenNote)
+            btn_orange -> processTouchEvent(motionEvent.action, view, orangeNote)
+            btn_yellow -> processTouchEvent(motionEvent.action, view, yellowNote)
         }
 
         if (motionEvent.action == MotionEvent.ACTION_UP && userInputMode)
             view.performClick()
 
         return true
+    }
+
+    private fun processTouchEvent(action: Int, button: ImageView, note: MediaPlayer) {
+        when (action) {
+            MotionEvent.ACTION_DOWN -> {
+                if (userInputMode) {
+                    button.setImageDrawable(getLitTile(button))
+                    note.start()
+                }
+            }
+            MotionEvent.ACTION_POINTER_INDEX_MASK -> {
+                button.setImageDrawable(getLitTile(button))
+                note.start()
+            }
+            MotionEvent.ACTION_UP -> {
+                if (userInputMode) {
+                    button.setImageDrawable(getUnlitTile(button))
+                    note.pause()
+                }
+            }
+            MotionEvent.ACTION_POINTER_INDEX_SHIFT -> {
+                button.setImageDrawable(getUnlitTile(button))
+                note.pause()
+            }
+        }
+    }
+
+    private fun getLitTile(button: ImageView): Drawable? {
+        return when (button) {
+            btn_orange -> resources.getDrawable(R.drawable.tile_orange_lit, null)
+            btn_green -> resources.getDrawable(R.drawable.tile_green_lit, null)
+            btn_blue -> resources.getDrawable(R.drawable.tile_blue_lit, null)
+            btn_yellow -> resources.getDrawable(R.drawable.tile_yellow_lit, null)
+            else -> null
+        }
+    }
+
+    private fun getUnlitTile(button: ImageView): Drawable? {
+        return when (button) {
+            btn_orange -> resources.getDrawable(R.drawable.tile_orange_unlit, null)
+            btn_green -> resources.getDrawable(R.drawable.tile_green_unlit, null)
+            btn_blue -> resources.getDrawable(R.drawable.tile_blue_unlit, null)
+            btn_yellow -> resources.getDrawable(R.drawable.tile_yellow_unlit, null)
+            else -> null
+        }
     }
 
     private fun setListeners(btn: ImageView, buttonColor: ButtonColors) {
@@ -253,10 +191,7 @@ class GameFragment() :
         level++
         readyToCheck = false
         presses.clear()
-        view?.findViewById<Button>(R.id.start_button)?.let {
-            it.text = resources.getString(R.string.start_level, level)
-            it.visibility = View.VISIBLE
-        }
+        updateLevelDisplay(false)
     }
 
     override fun displayEndScreen(resId: Int, finished: Boolean) {
@@ -265,9 +200,9 @@ class GameFragment() :
 
         val builder = AlertDialog.Builder(requireContext())
         builder.setMessage(message).setCancelable(false)
-            .setPositiveButton("OK", DialogInterface.OnClickListener { dialog, _ ->
+            .setPositiveButton("OK") { dialog, _ ->
                 dialog.dismiss()
-            })
+            }
 
         val dialog = builder.create()
         dialog.setTitle(resources.getString(R.string.game_over))
@@ -282,5 +217,23 @@ class GameFragment() :
         }
 
         return passed
+    }
+
+    override fun updateLevelDisplay(hideButton: Boolean) {
+        if (hideButton) {
+            view?.findViewById<TextView>(R.id.level)?.let {
+                it.text = resources.getString(R.string.level, level)
+                it.visibility = View.VISIBLE
+            }
+
+            view?.findViewById<Button>(R.id.start_button)?.visibility = View.INVISIBLE
+        } else {
+            view?.findViewById<TextView>(R.id.level)?.visibility = View.INVISIBLE
+
+            view?.findViewById<Button>(R.id.start_button)?.let {
+                it.text = resources.getString(R.string.start_level, level)
+                it.visibility = View.VISIBLE
+            }
+        }
     }
 }

@@ -76,4 +76,5 @@ interface SequenceListener {
     fun displayEndScreen(resId: Int, finished: Boolean)
     fun increaseLevel()
     fun resetControlsAppearance()
+    fun updateLevelDisplay(hideButton: Boolean)
 }
