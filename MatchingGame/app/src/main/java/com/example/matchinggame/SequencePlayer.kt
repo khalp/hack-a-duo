@@ -3,7 +3,6 @@ package com.example.matchinggame
 import android.os.Handler
 import android.util.Log
 import com.example.matchinggame.model.SequenceGenerator
-import com.example.matchinggame.model.SequenceGenerator.Companion.ButtonColors
 import kotlinx.coroutines.Runnable
 
 class SequencePlayer {
@@ -25,7 +24,7 @@ class SequencePlayer {
         p2Frag = frag
     }
 
-    fun playSequence(): Array<ButtonColors>? {
+    fun playSequence() {
         try {
             if (!this::p1Frag.isInitialized)
                 throw IllegalStateException("Cannot play sequence before initializing fragment")
@@ -33,6 +32,10 @@ class SequencePlayer {
             // Disable user input
             p1Frag.disableButtons()
             p2Frag?.disableButtons()
+
+            // Update level display
+            p1Frag.updateLevelDisplay(true)
+            p2Frag?.updateLevelDisplay(true)
 
             // Play generated sequence
             val sequence = SequenceGenerator.generateSequence(sequenceLength)
@@ -45,6 +48,7 @@ class SequencePlayer {
                     {
                         if (i > 0) {
                             p1Frag.stopNote(sequence[i - 1])
+                            p2Frag?.stopNote(sequence[i - 1])
                         }
                     },
                     i * noteLength + (i - 1) * noteDelay
@@ -52,6 +56,7 @@ class SequencePlayer {
                 handler.postDelayed(
                     Runnable {
                         p1Frag.playNote(sequence[i])
+                        p2Frag?.playNote(sequence[i])
                     },
                     i * (noteLength + noteDelay)
                 )
@@ -60,6 +65,7 @@ class SequencePlayer {
             handler.postDelayed(
                 Runnable {
                     p1Frag.stopNote(sequence[sequence.lastIndex])
+                    p2Frag?.stopNote(sequence[sequence.lastIndex])
 
                     // Enable user input
                     p1Frag.enableButtons()
@@ -68,10 +74,10 @@ class SequencePlayer {
                 sequence.size * noteLength + (sequence.size - 1) * noteDelay
             )
 
-            return sequence
+            p1Frag.sequence = sequence
+            p2Frag?.sequence = sequence
         } catch (e: Exception) {
             Log.e(this.javaClass.toString(), e.message.toString())
-            return null
         }
     }
 
@@ -118,7 +124,6 @@ class SequencePlayer {
                 p1Frag.displayEndScreen(R.string.won_solo, finished)
             } else {
                 p1Frag.displayEndScreen(R.string.won_tie_multiplayer, finished)
-                p2Frag?.displayEndScreen(R.string.won_tie_multiplayer, finished)
             }
         } else {
             // Game finished before levels were completed
@@ -130,17 +135,14 @@ class SequencePlayer {
                 when (winningSide) {
                     0 -> {
                         // Both failed
-                        p1Frag.displayEndScreen(R.string.lost_tie_multiplayer, finished)
                         p2Frag?.displayEndScreen(R.string.lost_tie_multiplayer, finished)
                     }
                     1 -> {
                         // Player one won
                         p1Frag.displayEndScreen(R.string.won_player_one, finished)
-                        p2Frag?.displayEndScreen(R.string.lost_other_player, finished)
                     }
                     2 -> {
                         // Player two won
-                        p1Frag.displayEndScreen(R.string.lost_other_player, finished)
                         p2Frag?.displayEndScreen(R.string.won_player_two, finished)
                     }
                     else -> throw IllegalArgumentException("Losing side $winningSide must be in range [0, 2]")

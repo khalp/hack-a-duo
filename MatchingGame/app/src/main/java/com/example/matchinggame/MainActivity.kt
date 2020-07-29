@@ -25,12 +25,11 @@ class MainActivity : AppCompatActivity() {
 
             startGameFragment(R.id.first_container_id)
         } else {
-            // TODO: add dual screen action here
             removeFragment(R.id.first_container_id)
             removeFragment(R.id.second_container_id)
 
             startGameFragment(R.id.first_container_id)
-            startMultiplayerFragment(R.id.second_container_id)
+            startGameFragment(R.id.second_container_id)
         }
     }
 
@@ -43,11 +42,6 @@ class MainActivity : AppCompatActivity() {
     private fun startGameFragment(container: Int) {
         supportFragmentManager.beginTransaction()
             .replace(container, GameFragment.newInstance(player), GAME)
-            .commit()
-    }
-    private fun startMultiplayerFragment(container: Int) {
-        supportFragmentManager.beginTransaction()
-            .replace(container, GameFragment.newInstance(player), MULTIPLAYER)
             .commit()
     }
 }
