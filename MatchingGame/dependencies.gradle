@@ -59,7 +59,7 @@ ext {
 
     //Android test dependencies version
     junitInstrumentationVersion = "1.1.1"
-    espressoCoreVersion = "3.2.0"
+    espressoCoreVersion = "3.4.0"
     testRunnerVersion = "1.2.0"
 
     instrumentationTestDependencies = [
