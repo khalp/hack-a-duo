@@ -4,6 +4,6 @@ updates:
     directory: "/MatchingGame" 
     schedule:
       interval: "daily"
-    allow:
-      - dependency-name: "window"
-      - dependency-name: "compose"
+    # allow:
+    #   - dependency-name: "window"
+    #   - dependency-name: "compose"
