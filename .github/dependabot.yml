@@ -1,9 +1,0 @@
-version: 2
-updates:
-  - package-ecosystem: "gradle" 
-    directory: "/MatchingGame" 
-    schedule:
-      interval: "daily"
-    allow:
-      - dependency-name: "androidx.window:window"
-      - dependency-name: "androidx.compose.material:material"
